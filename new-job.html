@@ -1,1 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Create New Job</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="header">
+
+<div class="logo">
+Site<span>Scop</span> Inspections
+</div>
+
+</div>
+
+<div class="nav">
+
+<a href="index.html">Dashboard</a>
+<a href="jobs.html">Jobs</a>
+<a href="new-job.html">New Job</a>
+<a href="in-progress-jobs.html">In Progress</a>
+<a href="recycle-bin.html">Recycle Bin</a>
+<a href="settings.html">Settings</a>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Create New Inspection Job</h2>
+
+<div class="form-group">
+<label>Job Number</label>
+<input type="text" id="jobNumber" readonly>
+</div>
+
+<div class="form-group">
+<label>Client Name</label>
+<input type="text" id="clientName">
+</div>
+
+<div class="form-group">
+<label>Client Mobile</label>
+<input type="text" id="clientMobile">
+</div>
+
+<div class="form-group">
+<label>Property Address</label>
+<input type="text" id="propertyAddress">
+</div>
+
+<div class="form-group">
+<label>Inspection Type</label>
+
+<select id="inspectionType">
+
+<option value="Pest & Timber">
+Pest & Timber Inspection
+</option>
+
+<option value="Building">
+Building Inspection
+</option>
+
+<option value="Combined">
+Combined Building & Pest
+</option>
+
+</select>
+
+</div>
+
+<button
+class="btn btn-success"
+onclick="createJob()">
+
+Create Job
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const STORAGE_KEY = "sitescopInspectionData";
+
+function getData(){
+
+return JSON.parse(
+localStorage.getItem(STORAGE_KEY)
+) || {
+jobs:[],
+recycleBin:[],
+settings:{}
+};
+
+}
+
+function saveData(data){
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(data)
+);
+
+}
+
+function generateJobNumber(){
+
+let data = getData();
+
+let nextNumber =
+(data.jobs.length + 1);
+
+let jobNumber =
+"PT-" +
+String(nextNumber).padStart(4,"0");
+
+document.getElementById(
+"jobNumber"
+).value = jobNumber;
+
+}
+
+function createJob(){
+
+let data = getData();
+
+let newJob = {
+
+jobNumber:
+document.getElementById("jobNumber").value,
+
+clientName:
+document.getElementById("clientName").value,
+
+clientMobile:
+document.getElementById("clientMobile").value,
+
+propertyAddress:
+document.getElementById("propertyAddress").value,
+
+inspectionType:
+document.getElementById("inspectionType").value,
+
+status:"Draft",
+
+created:
+new Date().toLocaleString()
+
+};
+
+data.jobs.push(newJob);
+
+saveData(data);
+
+localStorage.setItem(
+"currentJob",
+JSON.stringify(newJob)
+);
+
+window.location.href =
+"pest-timber.html";
+
+}
+
+generateJobNumber();
+
+</script>
+
+</body>
+</html>
