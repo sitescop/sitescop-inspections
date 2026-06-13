@@ -1,1 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pest & Timber Inspection</title>
 
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.section{
+background:#fff;
+padding:20px;
+margin-bottom:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.section h2{
+margin-bottom:15px;
+border-bottom:2px solid #eee;
+padding-bottom:10px;
+}
+
+.check-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:10px;
+}
+
+.check-grid label{
+display:block;
+padding:8px;
+border:1px solid #ddd;
+border-radius:6px;
+background:#fafafa;
+}
+
+.action-bar{
+display:flex;
+gap:10px;
+margin-bottom:25px;
+}
+
+textarea{
+min-height:120px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+<div class="logo">
+Site<span>Scop</span> Inspections
+</div>
+</div>
+
+<div class="nav">
+<a href="index.html">Dashboard</a>
+<a href="jobs.html">Jobs</a>
+<a href="new-job.html">New Job</a>
+<a href="in-progress-jobs.html">In Progress</a>
+<a href="recycle-bin.html">Recycle Bin</a>
+<a href="settings.html">Settings</a>
+</div>
+
+<div class="container">
+
+<div class="action-bar">
+
+<button
+class="btn btn-success"
+onclick="saveDraft()">
+Save Draft
+</button>
+
+<button
+class="btn btn-primary"
+onclick="updateJob()">
+Update Job
+</button>
+
+</div>
+
+<div class="section">
+
+<h2>Job Information</h2>
+
+<div class="form-group">
+<label>Job Number</label>
+<input type="text" id="jobNumber" readonly>
+</div>
+
+<div class="form-group">
+<label>Client Name</label>
+<input type="text" id="clientName" readonly>
+</div>
+
+<div class="form-group">
+<label>Property Address</label>
+<input type="text" id="propertyAddress">
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Inspection Details</h2>
+
+<div class="form-group">
+<label>Inspection Date</label>
+<input type="date" id="inspectionDate">
+</div>
+
+<div class="form-group">
+<label>Inspector</label>
+<input type="text" id="inspectorName">
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Roof Construction</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Tile Roof</label>
+<label><input type="checkbox"> Metal Roof</label>
+<label><input type="checkbox"> Flat Roof</label>
+<label><input type="checkbox"> Timber Frame</label>
+<label><input type="checkbox"> Steel Frame</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Wall Construction</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Brick Veneer</label>
+<label><input type="checkbox"> Double Brick</label>
+<label><input type="checkbox"> Timber Cladding</label>
+<label><input type="checkbox"> Fibre Cement</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Floor Construction</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Concrete Slab</label>
+<label><input type="checkbox"> Timber Floor</label>
+<label><input type="checkbox"> Suspended Floor</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Access Restrictions</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Roof Void Restricted</label>
+<label><input type="checkbox"> Subfloor Restricted</label>
+<label><input type="checkbox"> Furniture Obstruction</label>
+<label><input type="checkbox"> Locked Area</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Condition</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Good</label>
+<label><input type="checkbox"> Fair</label>
+<label><input type="checkbox"> Poor</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Chemical Barrier</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Present</label>
+<label><input type="checkbox"> Not Visible</label>
+<label><input type="checkbox"> Requires Assessment</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>Roof Covering</h2>
+
+<div class="check-grid">
+
+<label><input type="checkbox"> Concrete Tile</label>
+<label><input type="checkbox"> Terracotta Tile</label>
+<label><input type="checkbox"> Metal Sheet</label>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>General Notes</h2>
+
+<textarea id="generalNotes"></textarea>
+
+</div>
+
+</div>
+
+<script>
+
+const FORM_KEY = "sitescopCurrentInspection";
+
+function loadJob(){
+
+let job =
+JSON.parse(
+localStorage.getItem("currentJob")
+);
+
+if(!job) return;
+
+document.getElementById("jobNumber").value =
+job.jobNumber || "";
+
+document.getElementById("clientName").value =
+job.clientName || "";
+
+document.getElementById("propertyAddress").value =
+job.propertyAddress || "";
+
+}
+
+function saveDraft(){
+
+let formData = {
+
+jobNumber:
+document.getElementById("jobNumber").value,
+
+propertyAddress:
+document.getElementById("propertyAddress").value,
+
+inspectionDate:
+document.getElementById("inspectionDate").value,
+
+inspectorName:
+document.getElementById("inspectorName").value,
+
+generalNotes:
+document.getElementById("generalNotes").value
+
+};
+
+localStorage.setItem(
+FORM_KEY,
+JSON.stringify(formData)
+);
+
+alert("Draft Saved Successfully");
+
+}
+
+function loadDraft(){
+
+let data =
+JSON.parse(
+localStorage.getItem(FORM_KEY)
+);
+
+if(!data) return;
+
+document.getElementById("propertyAddress").value =
+data.propertyAddress || "";
+
+document.getElementById("inspectionDate").value =
+data.inspectionDate || "";
+
+document.getElementById("inspectorName").value =
+data.inspectorName || "";
+
+document.getElementById("generalNotes").value =
+data.generalNotes || "";
+
+}
+
+function updateJob(){
+
+saveDraft();
+
+alert("Job Updated Successfully");
+
+}
+
+loadJob();
+loadDraft();
+
+</script>
+
+</body>
+</html>
